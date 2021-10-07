@@ -1,20 +1,43 @@
 const BigInt = require('./index')
 
 describe('BigInt operations', () => {
-  it('adds two numbers', () => {
+  it('can create a big number from another big number', () => {
+    const strNumber = '1234567890'
+    const bigNumber = new BigInt(strNumber)
+    const newBigNumber = new BigInt(bigNumber)
+    expect(newBigNumber.toString()).toBe(strNumber)
+  })
+
+  it('"plus" operation does not mutate numbers', () => {
+    const strNumber = '11111'
+    const bigNumber1 = new BigInt(strNumber)
+    const bigNumber2 = new BigInt(strNumber)
+
+    bigNumber1.plus(bigNumber2)
+    expect(bigNumber1.toString()).toBe(strNumber)
+    expect(bigNumber2.toString()).toBe(strNumber)
+  })
+
+  it('sums two numbers into a new number', () => {
     const bigNumber1 = new BigInt(11111)
     const bigNumber2 = new BigInt('11111')
 
-    const sum = bigNumber1.add(bigNumber2)
+    const sum = bigNumber1.plus(bigNumber2)
     expect(sum.toString()).toBe('22222')
   })
 
-  it('adds two numbers of different length', () => {
+  it('sums two numbers of different length into a new number', () => {
     const bigNumber1 = new BigInt('111')
     const bigNumber2 = new BigInt('111111111111')
 
-    const sum = bigNumber1.add(bigNumber2)
+    const sum = bigNumber1.plus(bigNumber2)
     expect(sum.toString()).toBe('111111111222')
+  })
+
+  it('adds another number to an existing number (mutating the original)', () => {
+    const bigNumber = new BigInt('1111')
+    bigNumber.add(new BigInt('2222'))
+    expect(bigNumber.toString()).toBe('3333')
   })
 
   it('sums several numbers', () => {

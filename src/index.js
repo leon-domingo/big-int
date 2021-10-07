@@ -21,7 +21,7 @@ class BigInt {
     return new BigInt(newArr.join(''))
   }
 
-  add(anotherNumber) {
+  plus(anotherNumber) {
     const thisNumberArr = this.toArray().reverse()
     const thisNumberLength = thisNumberArr.length
     let index1 = 0
@@ -48,10 +48,18 @@ class BigInt {
     return new BigInt(sumArr.join(''))
   }
 
+  add(...otherNumbers) {
+    let bigSum = new BigInt(this.number)
+    for (let anotherNumber of otherNumbers) {
+      bigSum = bigSum.plus(anotherNumber)
+    }
+    this.number = bigSum.toString()
+  }
+
   static sum(...otherNumbers) {
     let bigSum = new BigInt(0)
     for (let anotherNumber of otherNumbers) {
-      bigSum = bigSum.add(anotherNumber)
+      bigSum = bigSum.plus(anotherNumber)
     }
     return bigSum
   }
