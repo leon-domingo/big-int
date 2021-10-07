@@ -8,7 +8,7 @@ class BigInt {
     if (!/^\d+$/.test(strNumber)) {
       throw `"${strNumber}" is not a valid representation of an integer`
     }
-    this.number = strNumber
+    this.number = strNumber.replace(/^0+/g, '') || '0'
   }
 
   toString() {
@@ -43,7 +43,7 @@ class BigInt {
       const value1 = thisNumberArr[index1++] || 0
       const value2 = anotherNumberArr[index2++] || 0
       const sum = value1 + value2 + rest
-      if (sum > 10) {
+      if (sum >= 10) {
         rest = 1
         sumArr.push(sum - 10)
       } else {
@@ -51,8 +51,15 @@ class BigInt {
         sumArr.push(sum)
       }
     }
-    sumArr.reverse()
-    return new BigInt(sumArr.join(''))
+    if (rest > 0) {
+      const restArr = rest
+        .toString()
+        .split('')
+        .reverse().map(Number)
+      sumArr.push(...restArr)
+    }
+    const sumStr = sumArr.reverse().join('')
+    return new BigInt(sumStr)
   }
 
   add(...otherNumbers) {
