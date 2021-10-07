@@ -1,6 +1,14 @@
 class BigInt {
+  /**
+   * Creates a `BigInt` instance
+   * @param {string|number|BigInt} intNumber The big number representation
+   */
   constructor(intNumber) {
-    this.number = intNumber.toString().replace(/[^\d]/ig, '')
+    const strNumber = intNumber.toString()
+    if (!/^\d+$/.test(strNumber)) {
+      throw `"${strNumber}" is not a valid representation of an integer`
+    }
+    this.number = strNumber
   }
 
   toString() {
@@ -17,7 +25,6 @@ class BigInt {
       .reduce((acc, item) => {
         return acc.concat(item.split(''))
       }, [])
-      .filter(digit => /\d/.test(digit))
     return new BigInt(newArr.join(''))
   }
 
@@ -26,7 +33,7 @@ class BigInt {
     const thisNumberLength = thisNumberArr.length
     let index1 = 0
 
-    const anotherNumberArr = anotherNumber.toArray().reverse()
+    const anotherNumberArr = new BigInt(anotherNumber).toArray().reverse()
     const anotherNumberLength = anotherNumberArr.length
     let index2 = 0
 
@@ -56,12 +63,20 @@ class BigInt {
     this.number = bigSum.toString()
   }
 
+  addAll(otherNumbers) {
+    this.add(...otherNumbers)
+  }
+
   static sum(...otherNumbers) {
     let bigSum = new BigInt(0)
     for (let anotherNumber of otherNumbers) {
       bigSum = bigSum.plus(anotherNumber)
     }
     return bigSum
+  }
+
+  static sumAll(otherNumbers) {
+    return BigInt.sum(...otherNumbers)
   }
 }
 
